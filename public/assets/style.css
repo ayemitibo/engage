@@ -45,6 +45,7 @@ p {
 }
 
 .editor {
+  text-align: left;
   width: 70vw;
   height: 50vh;
   margin: 2rem;
@@ -90,7 +91,6 @@ img {
   width: 60px;
   height: 60px;
   margin-top: 0.4rem;
-  border-radius: 50rem;
 }
 label {
   margin-left: 0.04rem;
