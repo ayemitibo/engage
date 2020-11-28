@@ -45,6 +45,7 @@ export default {
     return {
       textInput: "",
       image: "",
+      currentIndexToEdit: this.$route.query.edit,
     };
   },
   methods: {
@@ -55,24 +56,9 @@ export default {
       event.stopPropagation();
       this.createImage(event.dataTransfer.files[0]);
     },
-    // getText(event) {
-    //   this.textInput = event.target.innerHTML;
-    // },
     textVariarionFunc(type) {
       document.execCommand(type, false, 6);
     },
-    // debounce(func, delay) {
-    //   let debounceTimer;
-    //   return function() {
-    //     const context = this;
-    //     const args = arguments;
-    //     clearTimeout(debounceTimer);
-    //     debounceTimer = setTimeout(() => func.apply(context, args), delay);
-    //   };
-    // },
-    // saveText() {
-    //   this.debounce(this.autoSave(this.textInput), 2000);
-    // },
     createImage(file) {
       let image = document.createElement("img");
       var reader = new FileReader();
@@ -93,27 +79,25 @@ export default {
           .getPropertyValue("width")
           .replace("px", "")
       );
-      this.original_height = parseFloat(
-        getComputedStyle(this.image, null)
-          .getPropertyValue("height")
-          .replace("px", "")
-      );
       this.original_x = this.image.getBoundingClientRect().left;
-      this.original_y = this.image.getBoundingClientRect().top;
       this.original_mouse_x = event.pageX;
-      this.original_mouse_y = event.pageY;
       window.addEventListener("mousemove", this.resize);
       window.addEventListener("mouseup", this.stopResize);
     },
     resize(e) {
       const width = this.original_width + (e.pageX - this.original_mouse_x);
-      const height = this.original_height + (e.pageY - this.original_mouse_y);
       this.image.style.width = width + "px";
       this.image.style.height = width + "px";
     },
     saveText() {
       const editorContents = this.getEditorContentsFromStorage();
-      editorContents.push(this.$refs.editor.innerHTML);
+      if (this.currentIndexToEdit) {
+        editorContents[
+          this.currentIndexToEdit - 1
+        ] = this.$refs.editor.innerHTML;
+      } else {
+        editorContents.push(this.$refs.editor.innerHTML);
+      }
       localStorage.setItem("editorContents", JSON.stringify(editorContents));
       setTimeout(() => {
         this.$router.push("/all-contents");
@@ -124,7 +108,6 @@ export default {
     },
     getEditorContentsFromStorage() {
       let editorContents;
-      // if something exist on storage then we get the value, otherwise create an empty array
       if (localStorage.getItem("editorContents") === null) {
         editorContents = [];
       } else {
@@ -132,6 +115,14 @@ export default {
       }
       return editorContents;
     },
+  },
+  mounted() {
+    if (this.currentIndexToEdit) {
+      let content = this.getEditorContentsFromStorage()[
+        this.currentIndexToEdit - 1
+      ];
+      this.$refs.editor.innerHTML = content;
+    }
   },
 };
 </script>

@@ -9,10 +9,12 @@
       </thead>
       <tbody>
         <tr v-for="(item, index) in textContents" :key="index">
-          <td v-html="item"></td>
+          <td v-html="item.toString().replaceAll(/<img(.)*>/g, '')"></td>
           <td>
             <router-link :to="`/view/${index + 1}`">View</router-link>
-            <router-link :to="`/edit/${index}`">Edit</router-link>
+            <router-link :to="{ path: '/', query: { edit: index + 1 } }"
+              >Edit</router-link
+            >
             <a href="#" @click="deleteCurrentElement($event, index)">Delete</a>
           </td>
         </tr>
@@ -35,11 +37,7 @@ export default {
     },
   },
   mounted() {
-    const contents = JSON.parse(localStorage.getItem("editorContents"));
-    this.textContents = contents.map((item) => {
-      return item.toString().replaceAll(/<img(.)*>/g, "");
-    });
-    // console.log(this.textContents[0].toString().replaceAll(/<img(.)*>/g, ""));
+    this.textContents = JSON.parse(localStorage.getItem("editorContents"));
   },
 };
 </script>
