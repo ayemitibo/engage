@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Editor from "../views/editor.vue";
 import viewAllContent from "../views/view-text-content.vue";
+import viewSingle from "../views/single-view.vue";
 
 Vue.use(VueRouter);
 
@@ -15,6 +16,11 @@ const routes = [
     path: "/all-contents",
     name: "",
     component: viewAllContent,
+  },
+  {
+    path: "/view/:id",
+    name: "",
+    component: viewSingle,
   },
 ];
 
