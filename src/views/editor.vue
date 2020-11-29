@@ -36,7 +36,6 @@
     <div class="center">
       <div
         class="editor"
-        @focus="getFocusedElement"
         contenteditable
         @drop.prevent="getElement"
         ref="editor"
@@ -119,9 +118,6 @@ export default {
     },
     stopResize() {
       window.removeEventListener("mousemove", this.resize);
-    },
-    getFocusedElement(element) {
-      console.log(element);
     },
     getEditorContentsFromStorage() {
       let editorContents;
