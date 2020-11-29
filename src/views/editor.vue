@@ -1,5 +1,10 @@
 <template>
   <div>
+    <div>
+      <router-link to="all-contents" style="float : right"
+        >All Contents</router-link
+      >
+    </div>
     <div class="toolbar">
       <button
         class="tool-items fa fa-italic"
@@ -33,6 +38,7 @@
     <div class="center">
       <div
         class="editor"
+        @focus="getFocusedElement"
         contenteditable
         @drop.prevent="getElement"
         ref="editor"
@@ -69,6 +75,7 @@ export default {
       document.execCommand("fontSize", false, event.target.value);
     },
     createImage(file) {
+      console.log(file);
       let image = document.createElement("img");
       var reader = new FileReader();
       var vm = this;
@@ -114,6 +121,9 @@ export default {
     },
     stopResize() {
       window.removeEventListener("mousemove", this.resize);
+    },
+    getFocusedElement(element) {
+      console.log(element);
     },
     getEditorContentsFromStorage() {
       let editorContents;

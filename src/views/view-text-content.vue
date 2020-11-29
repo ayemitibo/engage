@@ -9,7 +9,7 @@
       </thead>
       <tbody>
         <tr v-for="(item, index) in textContents" :key="index">
-          <td v-html="item.toString().replaceAll(/<img(.)*>/g, '')"></td>
+          <td v-html="item"></td>
           <td>
             <router-link :to="`/view/${index + 1}`">View</router-link>
             <router-link :to="{ path: '/', query: { edit: index + 1 } }"
@@ -47,5 +47,9 @@ a {
 }
 table {
   text-align: left;
+}
+img {
+  width: 100px;
+  height: 100px;
 }
 </style>
