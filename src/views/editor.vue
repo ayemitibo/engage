@@ -1,10 +1,8 @@
 <template>
   <div>
-    <div>
-      <router-link to="all-contents" style="float : right"
-        >All Contents</router-link
-      >
-    </div>
+    <router-link to="all-contents" style="float : right"
+      >All Contents</router-link
+    >
     <div class="toolbar">
       <button
         class="tool-items fa fa-italic"

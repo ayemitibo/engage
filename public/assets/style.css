@@ -18,7 +18,6 @@ p {
 .toolbar {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(20px, 40px));
-  background-color: rgb(231, 231, 231);
   color: rgb(0, 0, 0);
   grid-gap: 1rem;
   padding: 1rem;
