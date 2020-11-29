@@ -10,19 +10,25 @@
         class="tool-items fa fa-bold"
         @click="textVariarionFunc('bold')"
       ></button>
-
-      <select name="select" id="select" @change="changeColor">
-        <option value="">Choose color</option>
-        <option value="green">green</option>
-        <option value="red">red</option>
-        <option value="blue">blue</option>
-        <option value="black">black</option>
+      <verte @input="changeColor">
+        <svg viewBox="0 0 24 24">
+          <path d="M0 20h24v4H0z" />
+          <path
+            style="fill: #000"
+            d="M11 3L5.5 17h2.25l1.12-3h6.25l1.12 3h2.25L13 3h-2zm-1.38 9L12 5.67 14.38 12H9.62z"
+          />
+        </svg>
+      </verte>
+      <select name="select" @change="changeFontSize">
+        <option value="">Select font size</option>
+        <option value="1">8 pt</option>
+        <option value="2">10 pt</option>
+        <option value="3">12 pt</option>
+        <option value="4">14 pt</option>
+        <option value="5">18 pt</option>
+        <option value="6">24 pt</option>
+        <option value="7">36 pt</option>
       </select>
-
-      <button
-        class="tool-items fas fa-heading"
-        @click="textVariarionFunc('fontSize')"
-      ></button>
     </div>
     <div class="center">
       <div
@@ -49,15 +55,18 @@ export default {
     };
   },
   methods: {
-    changeColor({ target }) {
-      document.execCommand("foreColor", false, target.value);
+    changeColor(value) {
+      document.execCommand("foreColor", false, value);
     },
     getElement(event) {
       event.stopPropagation();
       this.createImage(event.dataTransfer.files[0]);
     },
-    textVariarionFunc(type) {
-      document.execCommand(type, false, 6);
+    textVariarionFunc(type, event) {
+      document.execCommand(type, false);
+    },
+    changeFontSize(event) {
+      document.execCommand("fontSize", false, event.target.value);
     },
     createImage(file) {
       let image = document.createElement("img");

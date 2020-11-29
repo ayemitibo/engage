@@ -91,6 +91,7 @@ img {
   width: 60px;
   height: 60px;
   margin-top: 0.4rem;
+  display: block;
 }
 label {
   margin-left: 0.04rem;
