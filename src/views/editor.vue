@@ -5,12 +5,12 @@
     >
     <div class="toolbar">
       <button
-        class="tool-items fa fa-italic"
+        class="tool-items fa fa-italic p-2"
         @click="textVariarionFunc('italic')"
       ></button>
 
       <button
-        class="tool-items fa fa-bold"
+        class="tool-items fa fa-bold p-2"
         @click="textVariarionFunc('bold')"
       ></button>
       <verte @input="changeColor">
@@ -32,6 +32,20 @@
         <option value="6">24 pt</option>
         <option value="7">36 pt</option>
       </select>
+      <div class="button-wrapper">
+        <span class="label">
+          Upload File
+        </span>
+
+        <input
+          type="file"
+          name="upload"
+          id="upload"
+          class="upload-box"
+          placeholder="Upload File"
+          @change="selectFile"
+        />
+      </div>
     </div>
     <div class="center">
       <div
@@ -65,6 +79,10 @@ export default {
       event.stopPropagation();
       this.createImage(event.dataTransfer.files[0]);
     },
+    selectFile(event) {
+      event.stopPropagation();
+      this.createImage(event.target.files[0]);
+    },
     textVariarionFunc(type, event) {
       document.execCommand(type, false);
     },
@@ -78,10 +96,8 @@ export default {
       var vm = this;
       reader.onload = (e) => {
         image.setAttribute("src", e.target.result);
-        image.className = "resizers";
         this.$refs.editor.append(image);
-        this.image = image;
-        image.addEventListener("mousedown", this.resizeImage);
+        this.setClickEventListener();
       };
       reader.readAsDataURL(file);
     },
@@ -102,6 +118,11 @@ export default {
       this.image.style.width = width + "px";
       this.image.style.height = width + "px";
     },
+    getCurrentImageSelected(event, element) {
+      this.image = element;
+      element.className = "resizers";
+      element.addEventListener("mousedown", this.resizeImage);
+    },
     saveText() {
       const editorContents = this.getEditorContentsFromStorage();
       if (this.currentIndexToEdit) {
@@ -118,6 +139,7 @@ export default {
     },
     stopResize() {
       window.removeEventListener("mousemove", this.resize);
+      this.image.classList.remove("resizers");
     },
     getEditorContentsFromStorage() {
       let editorContents;
@@ -128,6 +150,15 @@ export default {
       }
       return editorContents;
     },
+    setClickEventListener() {
+      document
+        .querySelectorAll("img")
+        .forEach((element, index) =>
+          element.addEventListener("click", (event) =>
+            this.getCurrentImageSelected(event, element)
+          )
+        );
+    },
   },
   mounted() {
     if (this.currentIndexToEdit) {
@@ -135,6 +166,7 @@ export default {
         this.currentIndexToEdit - 1
       ];
       this.$refs.editor.innerHTML = content;
+      this.setClickEventListener();
     }
   },
 };
