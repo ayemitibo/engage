@@ -48,12 +48,7 @@
       </div>
     </div>
     <div class="center">
-      <div
-        class="editor"
-        contenteditable
-        @drop.prevent="getElement"
-        ref="editor"
-      ></div>
+      <div class="editor" @drop.prevent="getElement" ref="editor"></div>
     </div>
     <div class="center">
       <button class="getText btn" @click="saveText">
@@ -90,13 +85,19 @@ export default {
       document.execCommand("fontSize", false, event.target.value);
     },
     createImage(file) {
-      console.log(file);
+      let div = document.createElement("div");
       let image = document.createElement("img");
+      let imageRotate = document.createElement("span");
+      imageRotate.className = "rotate";
+      imageRotate.addEventListener("click", (event) => this.rotateImage(image));
       var reader = new FileReader();
       var vm = this;
       reader.onload = (e) => {
         image.setAttribute("src", e.target.result);
-        this.$refs.editor.append(image);
+        // div.innerHTML += image.outerHTML + imageRotate.outerHTML;
+        div.appendChild(image);
+        div.appendChild(imageRotate);
+        this.$refs.editor.append(div);
         this.setClickEventListener();
       };
       reader.readAsDataURL(file);
@@ -117,6 +118,39 @@ export default {
       const width = this.original_width + (e.pageX - this.original_mouse_x);
       this.image.style.width = width + "px";
       this.image.style.height = width + "px";
+    },
+    rotateImage(image) {
+      console.log(image, "here");
+      const width = image.offsetWidth;
+      const height = image.offsetHeight;
+      console.log(width, height);
+      // this should be in data attributes or extracted from deg
+      const currentRotateCycle = parseInt(
+        getComputedStyle(image).getPropertyValue("--current-rotate-cycle")
+      );
+
+      console.log(currentRotateCycle, "curr");
+
+      if (currentRotateCycle % 2 === 0) {
+        image.style.setProperty(
+          "--current-scale",
+          "scale(" + height / width + ")"
+        );
+      } else {
+        image.style.setProperty("--current-scale", "scale(1)");
+      }
+
+      if (currentRotateCycle === 3) {
+        image.style.setProperty("--current-rotate-cycle", 0);
+        image.style.setProperty("--current-rotate", "rotate(0deg)");
+      } else {
+        const newRotateCycle = currentRotateCycle + 1;
+        image.style.setProperty("--current-rotate-cycle", newRotateCycle);
+        image.style.setProperty(
+          "--current-rotate",
+          "rotate(" + newRotateCycle * 90 + "deg)"
+        );
+      }
     },
     getCurrentImageSelected(event, element) {
       this.image = element;
@@ -171,7 +205,8 @@ export default {
   },
 };
 </script>
-<style>
+
+<style lang="scss">
 .resizers {
   border: 3px solid #4286f4;
   box-sizing: border-box;
@@ -205,5 +240,9 @@ export default {
   right: -5px;
   bottom: -5px;
   cursor: nwse-resize;
+}
+
+.rotate::before {
+  content: "\e030";
 }
 </style>

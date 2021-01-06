@@ -119,8 +119,14 @@ p {
 img {
   width: 60px;
   height: 60px;
-  margin-top: 0.4rem;
-  display: block;
+  /* margin-top: 0.4rem;
+  display: block; */
+  --current-rotate-cycle: 0;
+  --current-rotate: rotate(0deg);
+  --current-scale: scale(1);
+  transform: var(--current-rotate) var(--current-scale) translate(-50%, -50%);
+  transform-origin: 0 0;
+  /* border: 1px solid #f00; */
 }
 label {
   margin-left: 0.04rem;
